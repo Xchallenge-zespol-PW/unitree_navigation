@@ -8,12 +8,15 @@ from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
-    pkg = get_package_share_directory('description_slambot')
+    pkg = get_package_share_directory('unitree_navigation')
     nav2_dir = get_package_share_directory('nav2_bringup')
+
+    # Dynamiczna ścieżka do pliku mapy wewnątrz paczki unitree_navigation/maps/
+    default_map_path = os.path.join(pkg, 'maps', 'mapa_sciany.yaml')
 
     map_arg = DeclareLaunchArgument(
         'map',
-        default_value='/home/kamil/ros2_ws/maps/mapa_sciany.yaml',       # !!!   Pełna ścieżka do pliku .yaml mapy   !!!
+        default_value=default_map_path,
         description='Pełna ścieżka do pliku .yaml mapy')
 
     params_arg = DeclareLaunchArgument(
@@ -21,7 +24,6 @@ def generate_launch_description():
         default_value=os.path.join(pkg, 'config', 'nav2_params.yaml'),
         description='Parametry Nav2')
 
-    # map_server + AMCL + planner/controller/BT navigator/behaviors itd.
     nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(nav2_dir, 'launch', 'bringup_launch.py')),
