@@ -8,8 +8,15 @@ from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+
     pkg = get_package_share_directory('unitree_navigation')
     nav2_dir = get_package_share_directory('nav2_bringup')
+
+    pointcloud_to_laserscan = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg, 'launch', 'pointcloud_to_scan.launch.py')
+        )
+    )
 
     # Dynamiczna ścieżka do pliku mapy wewnątrz paczki unitree_navigation/maps/
     default_map_path = os.path.join(pkg, 'maps', 'mapa_sciany.yaml')
@@ -34,4 +41,6 @@ def generate_launch_description():
             'autostart': 'True',
         }.items())
 
-    return LaunchDescription([map_arg, params_arg, nav2])
+    return LaunchDescription([map_arg, params_arg,
+                              pointcloud_to_laserscan,
+                              nav2])

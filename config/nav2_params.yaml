@@ -6,7 +6,7 @@ amcl:               # lokalilzacja (adaptive monte carlo localization)
     alpha3: 0.2
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "base_footprint"
+    base_frame_id: "pelvis"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
@@ -45,7 +45,7 @@ bt_navigator:
   ros__parameters:
     use_sim_time: True
     global_frame: map
-    robot_base_frame: base_link
+    robot_base_frame: pelvis
     odom_topic: /odom
     bt_loop_duration: 10
     default_server_timeout: 20
@@ -146,15 +146,14 @@ controller_server:
       debug_trajectory_details: True
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.2                                          # czapka na wyjściową prędkość liniowa do przodu (m/s), musi sie zgadzać z max_speed_xy
+      max_vel_x: 0.6                                          # ZWIĘKSZONO z 0.2 na 0.6
       max_vel_y: 0.0
-      max_vel_theta: 0.7                                      # czapka na wyjściową prędkość kątowa (rad/s)
+      max_vel_theta: 1.5                                      # ZWIĘKSZONO z 0.7 na 1.5
       min_speed_xy: 0.0
-      max_speed_xy: 0.2
+      max_speed_xy: 0.6                                      # Musi się zgadzać z max_vel_x!
       min_speed_theta: 0.0
-      acc_lim_x: 1.0                                        # limity przyspieszeń
-      acc_lim_y: 0.0
-      acc_lim_theta: 1.0
+      acc_lim_x: 2.0                                          # Można lekko podbić przyspieszenia
+      acc_lim_theta: 2.0
       decel_lim_x: -1.5
       decel_lim_y: 0.0
       decel_lim_theta: -1.2
@@ -187,7 +186,7 @@ local_costmap:
       update_frequency: 5.0
       publish_frequency: 2.0
       global_frame: odom
-      robot_base_frame: base_link
+      robot_base_frame: pelvis
       use_sim_time: True
       rolling_window: true
       width: 6
@@ -230,7 +229,7 @@ global_costmap:
       update_frequency: 1.0
       publish_frequency: 1.0
       global_frame: map
-      robot_base_frame: base_link
+      robot_base_frame: pelvis
       use_sim_time: True
       robot_radius: 0.22
       resolution: 0.05
@@ -312,7 +311,7 @@ behavior_server:
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
     global_frame: odom
-    robot_base_frame: base_link
+    robot_base_frame: pelvis
     transform_tolerance: 0.1
     use_sim_time: true
     simulate_ahead_time: 2.0
@@ -341,10 +340,10 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.2, 0.0, 1.0]
-    min_velocity: [-0.26, 0.0, -1.0]      # ujemne vel pozwala cofać. wartośći prędkości muszą sie zgadzać z max_speed_xy i max_vel_x/y/theta w FollowPath
-    max_accel: [2.5, 0.0, 3.2]
-    max_decel: [-2.5, 0.0, -3.2]
+    max_velocity: [0.6, 0.0, 1.5]     # Zgodne z nowym max_vel_x i max_vel_theta
+    min_velocity: [-0.6, 0.0, -1.5]   # Ujemne pozwala sprawnie cofać z tą samą prędkością
+    max_accel: [3.0, 0.0, 3.2]
+    max_decel: [-3.0, 0.0, -3.2]
     odom_topic: "odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]

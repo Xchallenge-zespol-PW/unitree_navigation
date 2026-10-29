@@ -15,4 +15,9 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(PROGRAMS
+  scan_rotator.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_package()
